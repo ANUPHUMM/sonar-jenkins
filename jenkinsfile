@@ -1,14 +1,45 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your code from version control
-                checkout scm
+                // Checkout your CSS project from version control
+                // Replace the repository URL and credentials if needed
+                git branch: 'main', url: 'https://github.com/ANUPHUMM/sonar-jenkins.git'
             }
         }
         
+        stage('Build') {
+            steps {
+                // This stage may include any build steps specific to your CSS project, like compilation or preprocessing
+                // For CSS, it might involve minification, linting, etc.
+                sh 'echo "Build steps for CSS project"'
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            // Actions to perform on successful completion of the pipeline
+            echo 'Pipeline executed successfully!'
+            // You can add notifications or additional actions here
+        }
+        failure {
+            // Actions to perform if the pipeline fails
+            echo 'Pipeline failed!'
+            // You can add notifications or additional actions here
         }
     }
 }
