@@ -1,11 +1,38 @@
-node {
-  stage('SCM') {
-    checkout scm
-  }
-  stage('SonarQube Analysis') {
-    def scannerHome = tool 'SonarScanner';
-    withSonarQubeEnv() {
-      sh "${scannerHome}/bin/sonar-scanner"
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your code from version control
+                checkout scm
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                // Set up SonarQube Scanner (assuming it's installed and configured in your environment)
+                script {
+                    def scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
     }
-  }
+    
+    post {
+        always {
+            // Publish SonarQube analysis results
+            script {
+                def scannerHome = tool 'SonarQube Scanner'
+                withSonarQubeEnv('SonarQube') {
+                    def sqScanner = "${scannerHome}/bin/sonar-scanner"
+                    sh "${sqScanner} -Dsonar.projectKey=your_project_key -Dsonar.sources=src/css"
+                }
+            }
+            // You can add more post-build actions as needed
+        }
+    }
 }
