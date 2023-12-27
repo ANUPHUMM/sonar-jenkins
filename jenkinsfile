@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('BUILD') {
             steps {
                 // Checkout your CSS project from version control
                 // Replace the repository URL and credentials if needed
-                git branch: 'main', url: 'https://github.com/ANUPHUMM/sonar-jenkins.git'
+                //git branch: 'main', url: 'https://github.com/ANUPHUMM/sonar-jenkins.git'
+                echo 'build'
             }
         }
         
