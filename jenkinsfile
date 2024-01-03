@@ -2,45 +2,38 @@ pipeline {
     agent any
 
     stages {
-        stage('BUILD') {
-            steps {
-                // Checkout your CSS project from version control
-                // Replace the repository URL and credentials if needed
-                //git branch: 'main', url: 'https://github.com/ANUPHUMM/sonar-jenkins.git'
-                echo 'build'
-            }
-        }
-        
         stage('Build') {
             steps {
-                // This stage may include any build steps specific to your CSS project, like compilation or preprocessing
-                // For CSS, it might involve minification, linting, etc.
-                sh 'echo "Build steps for CSS project"'
+                // Your build steps here
+                sh 'echo "Building"'
             }
         }
-        
-        stage('SonarQube Analysis') {
+        stage('Test') {
             steps {
-                script {
-                    scannerHome = tool 'Sonarqube'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
+                // Your test steps here
+                sh 'echo "Testing"'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Your deployment steps here
+                sh 'echo "Deploying"'
+            }
+        }
+        stage('Cleanup') {
+            steps {
+                // Your cleanup steps here
+                sh 'echo "Cleaning up"'
             }
         }
     }
-    
+
     post {
         success {
-            // Actions to perform on successful completion of the pipeline
-            echo 'Pipeline executed successfully!'
-            // You can add notifications or additional actions here
+            echo 'All stages completed successfully!'
         }
         failure {
-            // Actions to perform if the pipeline fails
-            echo 'Pipeline failed!'
-            // You can add notifications or additional actions here
+            echo 'Pipeline failed :('
         }
     }
 }
